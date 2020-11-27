@@ -14,7 +14,7 @@ def transform_to_onnx(cfgfile, weightfile, batch_size=1):
 
     x = torch.randn((batch_size, 3, model.height, model.width), requires_grad=True)  # .cuda()
 
-    onnx_file_name = "yolov4_{}_3_{}_{}.onnx".format(batch_size, model.height, model.width)
+    onnx_file_name = "yolov4.onnx"
 
     # Export the model
     print('Export the onnx model ...')
@@ -24,8 +24,11 @@ def transform_to_onnx(cfgfile, weightfile, batch_size=1):
                       export_params=True,
                       opset_version=11,
                       do_constant_folding=True,
-                      # input_names=['input'], output_names=['output_1', 'output_2', 'output_3'],
-                      dynamic_axes=None)
+                      input_names=['input'], output_names=['output'],
+                      dynamic_axes={
+                          'input': {0: 'batch_size'},
+                          'output': {0: 'batch_size'},
+                        })
 
     print('Onnx model exporting done')
     return onnx_file_name

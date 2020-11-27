@@ -62,7 +62,7 @@ class Upsample_expand(nn.Module):
         W = x.data.size(3)
         ws = stride
         hs = stride
-        x = x.view(B, C, H, 1, W, 1).expand(B, C, H, stride, W, stride).contiguous().view(B, C, H * stride, W * stride)
+        x = x.view(-1, C, H, 1, W, 1).expand(B, C, H, stride, W, stride).contiguous().view(-1, C, H * stride, W * stride)
         return x
 
 
